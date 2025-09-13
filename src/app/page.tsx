@@ -5,20 +5,29 @@ import MorphingSphere from '@/components/MorphingSphere'
 import GradientPlane from '@/components/GradientPlane'
 import { PROJECTS, CONTACT, LIKES } from '@/components/config'
 import HeartIcon from '@/components/HeartIcon'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
     <div className="relative w-full h-screen overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 120 }}
-          className="w-full h-full"
-        >
-          <GradientPlane />
-          <ambientLight intensity={0.25} />
-          <pointLight position={[10, 10, 10]} />
-          <MorphingSphere />
-        </Canvas>
+        {mounted && (
+          <Canvas
+            camera={{ position: [0, 0, 5], fov: 120 }}
+            className="w-full h-full"
+          >
+            <GradientPlane />
+            <ambientLight intensity={0.25} />
+            <pointLight position={[10, 10, 10]} />
+            <MorphingSphere />
+          </Canvas>
+        )}
       </div>
       
       <div className="relative z-10 flex flex-col justify-end items-start w-full h-full text-left text-white pointer-events-none p-8">
