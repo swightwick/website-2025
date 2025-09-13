@@ -73,10 +73,14 @@ export const CONTACT = [
   },
   {
     title: "GitHub",
-    link: "https://github.com/samwightwick"
+    link: "https://github.com/swightwick"
   },
   {
     title: "LinkedIn",
-    link: "https://linkedin.com/in/samwightwick"
+    link: "https://www.linkedin.com/in/samwightwick/"
+  },
+  {
+    title: "Music",
+    link: "https://open.spotify.com/artist/3mqAQkve4Njy0QFTaeutdM?si=yNVlqcbfT2-BDLTGUCuaMg"
   }
 ]
