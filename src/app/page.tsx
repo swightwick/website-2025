@@ -13,16 +13,16 @@ export default function Home() {
   }, [])
 
   if (!mounted) {
-    return <div className="w-full h-screen bg-gradient-to-br from-blue-900 to-purple-900" />
+    return <div className="w-full md:h-screen h-dvh bg-gradient-to-br from-blue-900 to-purple-900" />
   }
 
   return (
-    <div className="relative w-full h-screen overflow-hidden" suppressHydrationWarning>
+    <div className="relative w-full md:h-screen h-dvh overflow-hidden" suppressHydrationWarning>
       <div className="absolute inset-0 z-0">
         <ClientCanvas />
       </div>
       
-      <div className="relative z-10 flex flex-col justify-end items-start w-full h-full text-left text-white pointer-events-none p-8">
+      <div className="relative z-10 flex flex-col justify-end items-start w-full h-full text-left text-white pointer-events-none p-8 pb-0">
         <div className="max-w-lg">
           <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-widest opacity-90">
             SAM WIGHTWICK
@@ -55,8 +55,9 @@ export default function Home() {
 
           {/* Projects Section */}
           <div className="mb-4 inline-block pt-4">
+              <h3 className="font-medium opacity-90 mb-2 md:hidden">Latest Projects</h3>
             <div className="flex flex-wrap items-center gap-2 text-sm">
-              <h3 className="font-medium opacity-90">Latest Projects:</h3>
+              <h3 className="font-medium opacity-90 hidden md:block">Latest Projects:</h3>
               {PROJECTS.map((project, index) => (
                 <a 
                   key={index}
@@ -72,9 +73,10 @@ export default function Home() {
           </div>
 
           {/* Contact Section */}
-          <div>
+          <div className="pb-8">
+              <h3 className="font-medium opacity-90 block md:hidden mb-2">Contact</h3>
             <div className="flex flex-wrap items-center gap-2 text-sm">
-              <h3 className="font-medium opacity-90">Contact</h3>
+              <h3 className="font-medium opacity-90 hidden md:block">Contact</h3>
               {CONTACT.map((contact, index) => (
                 <a 
                   key={index}
