@@ -30,9 +30,3 @@ export const event = ({
   }
 }
 
-// Global gtag function
-declare global {
-  interface Window {
-    gtag: (...args: any[]) => void
-  }
-}

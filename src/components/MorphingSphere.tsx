@@ -1,15 +1,13 @@
 'use client'
 
 import { useRef, useMemo } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame, useThree, RootState } from '@react-three/fiber'
 import { Mesh, SphereGeometry, Vector3, ShaderMaterial } from 'three'
 import * as THREE from 'three'
 import { createNoise4D } from 'simplex-noise'
 import { SPHERE_CONFIG } from './config'
 
-interface MorphingSphereProps {
-  position?: [number, number, number]
-}
+
 
 const noise4D = createNoise4D(() => Math.random())
 
@@ -49,7 +47,7 @@ const fragmentShader = `
   }
 `
 
-export default function MorphingSphere({ position = [0, 0, 0] }: MorphingSphereProps) {
+export default function MorphingSphere() {
   const meshRef = useRef<Mesh>(null)
   const materialRef = useRef<ShaderMaterial>(null)
   const { mouse, viewport } = useThree()
@@ -79,8 +77,9 @@ export default function MorphingSphere({ position = [0, 0, 0] }: MorphingSphereP
     return positionData
   }, [])
   
-  useFrame((state) => {
-    if (meshRef.current && meshRef.current.geometry) {
+  useFrame((state: RootState) => {
+    const mesh = meshRef.current
+    if (mesh && mesh.geometry) {
       const time = state.clock.elapsedTime
       const v3 = new Vector3()
       
@@ -90,8 +89,8 @@ export default function MorphingSphere({ position = [0, 0, 0] }: MorphingSphereP
       }
       
       // Automatic rotation
-      meshRef.current.rotation.y = time * SPHERE_CONFIG.rotationSpeedY
-      meshRef.current.rotation.x = time * SPHERE_CONFIG.rotationSpeedX
+      mesh.rotation.y = time * SPHERE_CONFIG.rotationSpeedY
+      mesh.rotation.x = time * SPHERE_CONFIG.rotationSpeedX
 
       // Smoothly interpolate mouse position
       smoothedMouse.current.x = THREE.MathUtils.lerp(smoothedMouse.current.x, mouse.x, 0.1);
@@ -114,11 +113,11 @@ export default function MorphingSphere({ position = [0, 0, 0] }: MorphingSphereP
         
         // Copy original position and scale by noise (CodePen technique)
         v3.copy(p).addScaledVector(p, setNoise * noiseScale)
-        meshRef.current.geometry.attributes.position.setXYZ(idx, v3.x, v3.y, v3.z)
+        mesh.geometry.attributes.position.setXYZ(idx, v3.x, v3.y, v3.z)
       })
       
-      meshRef.current.geometry.computeVertexNormals()
-      meshRef.current.geometry.attributes.position.needsUpdate = true
+      mesh.geometry.computeVertexNormals()
+      mesh.geometry.attributes.position.needsUpdate = true
     }
   })
 
