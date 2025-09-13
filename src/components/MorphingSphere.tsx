@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useMemo } from 'react'
-import { useFrame, useThree, RootState } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { Mesh, SphereGeometry, Vector3, ShaderMaterial } from 'three'
 import * as THREE from 'three'
 import { createNoise4D } from 'simplex-noise'
@@ -9,7 +9,7 @@ import { SPHERE_CONFIG } from './config'
 
 
 
-const noise4D = createNoise4D(() => Math.random())
+const noise4D = createNoise4D()
 
 const vertexShader = `
   varying vec3 vPosition;
@@ -47,6 +47,8 @@ const fragmentShader = `
   }
 `
 
+
+
 export default function MorphingSphere() {
   const meshRef = useRef<Mesh>(null)
   const materialRef = useRef<ShaderMaterial>(null)
@@ -77,7 +79,7 @@ export default function MorphingSphere() {
     return positionData
   }, [])
   
-  useFrame((state: RootState) => {
+    useFrame((state) => {
     const mesh = meshRef.current
     if (mesh && mesh.geometry) {
       const time = state.clock.elapsedTime
@@ -93,8 +95,8 @@ export default function MorphingSphere() {
       mesh.rotation.x = time * SPHERE_CONFIG.rotationSpeedX
 
       // Smoothly interpolate mouse position
-      smoothedMouse.current.x = THREE.MathUtils.lerp(smoothedMouse.current.x, mouse.x, 0.1);
-      smoothedMouse.current.y = THREE.MathUtils.lerp(smoothedMouse.current.y, mouse.y, 0.1);
+      smoothedMouse.current.x = THREE.MathUtils.lerp( smoothedMouse.current.x, mouse.x, 0.1)
+      smoothedMouse.current.y = THREE.MathUtils.lerp(smoothedMouse.current.y, mouse.y, 0.1)
       
       // Apply morphing using the CodePen technique
       originalPositions.forEach((p, idx) => {
