@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Mono } from "next/font/google";
-import Script from 'next/script'
-import { GA_MEASUREMENT_ID } from '@/lib/gtag'
 import StructuredData from '@/components/StructuredData'
+import ClientScripts from '@/components/ClientScripts'
 import "./globals.css";
 
 const dmMono = DM_Mono({
@@ -98,28 +97,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {GA_MEASUREMENT_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_MEASUREMENT_ID}');
-              `}
-            </Script>
-          </>
-        )}
-      </head>
+      <head></head>
       <body
         className={`${dmMono.variable} antialiased font-mono`}
+        suppressHydrationWarning
       >
         <StructuredData />
+        <ClientScripts />
         {children}
       </body>
     </html>

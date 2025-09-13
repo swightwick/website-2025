@@ -1,8 +1,6 @@
 'use client'
 
-import { Canvas } from '@react-three/fiber'
-import MorphingSphere from '@/components/MorphingSphere'
-import GradientPlane from '@/components/GradientPlane'
+import ClientCanvas from '@/components/ClientCanvas'
 import { PROJECTS, CONTACT, LIKES } from '@/components/config'
 import HeartIcon from '@/components/HeartIcon'
 import { useState, useEffect } from 'react'
@@ -14,20 +12,14 @@ export default function Home() {
     setMounted(true)
   }, [])
 
+  if (!mounted) {
+    return <div className="w-full h-screen bg-gradient-to-br from-blue-900 to-purple-900" />
+  }
+
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden" suppressHydrationWarning>
       <div className="absolute inset-0 z-0">
-        {mounted && (
-          <Canvas
-            camera={{ position: [0, 0, 5], fov: 120 }}
-            className="w-full h-full"
-          >
-            <GradientPlane />
-            <ambientLight intensity={0.25} />
-            <pointLight position={[10, 10, 10]} />
-            <MorphingSphere />
-          </Canvas>
-        )}
+        <ClientCanvas />
       </div>
       
       <div className="relative z-10 flex flex-col justify-end items-start w-full h-full text-left text-white pointer-events-none p-8">
