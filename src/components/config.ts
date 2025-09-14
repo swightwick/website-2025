@@ -69,7 +69,7 @@ export const LIKES = [
 export const CONTACT = [
   {
     title: "Email",
-    link: "mailto:sam@example.com"
+    link: "mailto:info@samwightwick.co.uk"
   },
   {
     title: "GitHub",
