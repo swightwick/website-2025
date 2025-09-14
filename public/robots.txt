@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Block access to environment files and config
+Disallow: /.env
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://yourportfolio.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
