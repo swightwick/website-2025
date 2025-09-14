@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   other: {
-    'theme-color': '#004e92',
+    'theme-color': '#200B30',
     'color-scheme': 'dark light',
     'twitter:image': '/og-image.jpg',
     'twitter:card': 'summary_large_image',
