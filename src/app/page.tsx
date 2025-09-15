@@ -183,7 +183,7 @@ export default function Home() {
       
       {/* Content with fade-in animation */}
       <div 
-        className="relative z-10 flex flex-col justify-end items-start w-full h-full text-left text-white pointer-events-none p-8 pb-0"
+        className="relative z-10 flex flex-col justify-end items-start w-full h-full text-left text-white pointer-events-none p-4 md:p-8"
         style={{ 
           transition: 'opacity 1.5s ease-out, transform 1.5s ease-out',
           opacity: showContent ? 1 : 0,
@@ -239,7 +239,7 @@ export default function Home() {
                   intensity={0.8}
                   maxRotate={20}
                   hoverScale={1.1}
-                  className="inline-block mr-2"
+                  className="inline-block md:mr-2"
                 >
                   <a 
                     href={project.link}
@@ -255,7 +255,7 @@ export default function Home() {
           </div>
 
           {/* Contact Section */}
-          <div className="pb-8">
+          <div className="pb-1">
               <h3 className="font-medium opacity-90 block md:hidden mb-2">Links</h3>
             <div className="flex flex-wrap items-center gap-2 text-sm">
               <h3 className="font-medium opacity-90 hidden md:block mr-2">Links</h3>
@@ -265,7 +265,7 @@ export default function Home() {
                   intensity={0.8}
                   maxRotate={20}
                   hoverScale={1.1}
-                  className="inline-block mr-2"
+                  className="inline-block md:mr-2"
                 >
                   <a 
                     href={contact.link}
