@@ -43,12 +43,12 @@ export default function ClientCanvas({ onLoaded }: ClientCanvasProps) {
     return <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900" />
   }
 
-  const handlePointerDown = (e: any) => {
+  const handlePointerDown = (e: React.PointerEvent) => {
     dragStartPos.current = { x: e.clientX, y: e.clientY }
     hasDragged.current = false
     
     // Trigger compression immediately on press
-    const rect = e.target.getBoundingClientRect()
+    const rect = (e.target as HTMLElement).getBoundingClientRect()
     const x = ((e.clientX - rect.left) / rect.width) * 2 - 1
     const y = -((e.clientY - rect.top) / rect.height) * 2 + 1
     
@@ -63,7 +63,7 @@ export default function ClientCanvas({ onLoaded }: ClientCanvasProps) {
     window.dispatchEvent(dragStartEvent)
   }
 
-  const handlePointerMove = (e: any) => {
+  const handlePointerMove = (e: React.PointerEvent) => {
     const deltaX = Math.abs(e.clientX - dragStartPos.current.x)
     const deltaY = Math.abs(e.clientY - dragStartPos.current.y)
     
@@ -78,7 +78,7 @@ export default function ClientCanvas({ onLoaded }: ClientCanvasProps) {
     window.dispatchEvent(dragMoveEvent)
   }
 
-  const handlePointerUp = (e: any) => {
+  const handlePointerUp = () => {
     const dragEndEvent = new CustomEvent('sphereDragEnd')
     window.dispatchEvent(dragEndEvent)
     

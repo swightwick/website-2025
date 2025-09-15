@@ -1,8 +1,8 @@
 'use client'
 
-import { useRef, useMemo, useState, useEffect } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Mesh, SphereGeometry, Vector3, ShaderMaterial, Raycaster } from 'three'
+import { Mesh, SphereGeometry, Vector3, ShaderMaterial } from 'three'
 import * as THREE from 'three'
 import { createNoise4D } from 'simplex-noise'
 import { SPHERE_CONFIG } from './config'
@@ -53,13 +53,8 @@ const fragmentShader = `
 export default function MorphingSphere() {
   const meshRef = useRef<Mesh>(null)
   const materialRef = useRef<ShaderMaterial>(null)
-  const { mouse, viewport, camera } = useThree()
-  const raycaster = useMemo(() => new Raycaster(), [])
+  const { mouse, viewport } = useThree()
   const smoothedMouse = useRef({ x: 0, y: 0 });
-  const [waveIntensity, setWaveIntensity] = useState(1)
-  const intensityRef = useRef(1)
-  const targetIntensityRef = useRef(1)
-  const isAnimatingUp = useRef(false)
   const spinBoostRef = useRef(1)
   const lastTimeRef = useRef(0)
   const isDragging = useRef(false)
@@ -75,9 +70,6 @@ export default function MorphingSphere() {
   const globalWaveReduction = useRef(1)
   const isPressed = useRef(false)
   
-  // Easing function for smooth animation
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
-  const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
   const { tiltX, tiltY, isSupported, hasPermission } = useGyroscope({
     sensitivity: 0.8,
     smoothing: 0.05,
@@ -85,10 +77,11 @@ export default function MorphingSphere() {
   })
 
   useEffect(() => {
-    const handleSpherePress = (e: any) => {
+    const handleSpherePress = (e: Event) => {
       // Get screen coordinates
-      const screenX = e.detail?.screenX || 0
-      const screenY = e.detail?.screenY || 0
+      const customEvent = e as CustomEvent
+      const screenX = customEvent.detail?.screenX || 0
+      const screenY = customEvent.detail?.screenY || 0
       
       // Simple approach: map screen coordinates directly to sphere surface
       // This creates a more predictable mapping
@@ -111,19 +104,21 @@ export default function MorphingSphere() {
       console.log('Compression started - holding at scale:', targetSphereScale.current)
     }
 
-    const handleDragStart = (e: any) => {
+    const handleDragStart = (e: Event) => {
+      const customEvent = e as CustomEvent
       isDragging.current = true
-      previousMouse.current = { x: e.detail.x, y: e.detail.y }
+      previousMouse.current = { x: customEvent.detail.x, y: customEvent.detail.y }
       // Initialize target rotation to current rotation to prevent jumps
       targetRotation.current.y = userRotation.current.y
       targetRotation.current.x = userRotation.current.x
     }
 
-    const handleDragMove = (e: any) => {
+    const handleDragMove = (e: Event) => {
+      const customEvent = e as CustomEvent
       if (!isDragging.current) return
       
-      const deltaX = e.detail.x - previousMouse.current.x
-      const deltaY = e.detail.y - previousMouse.current.y
+      const deltaX = customEvent.detail.x - previousMouse.current.x
+      const deltaY = customEvent.detail.y - previousMouse.current.y
       
       // Apply rotation based on mouse movement
       const rotationDeltaX = deltaX * 0.01
@@ -136,7 +131,7 @@ export default function MorphingSphere() {
       rotationVelocity.current.y = rotationDeltaX * 0.5
       rotationVelocity.current.x = rotationDeltaY * 0.5
       
-      previousMouse.current = { x: e.detail.x, y: e.detail.y }
+      previousMouse.current = { x: customEvent.detail.x, y: customEvent.detail.y }
     }
 
     const handleDragEnd = () => {

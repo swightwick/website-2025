@@ -9,7 +9,6 @@ import { useState, useEffect } from 'react'
 export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [threeLoaded, setThreeLoaded] = useState(false)
-  const [minTimeElapsed, setMinTimeElapsed] = useState(false)
   const [canShowContent, setCanShowContent] = useState(false)
   const [showContent, setShowContent] = useState(false)
   const [isTextBoxVisible, setIsTextBoxVisible] = useState(true)

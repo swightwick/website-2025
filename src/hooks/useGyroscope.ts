@@ -72,8 +72,8 @@ export function useGyroscope(options: UseGyroscopeOptions = {}) {
 
       try {
         // Check if permission is required (iOS 13+)
-        if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-          const permission = await (DeviceOrientationEvent as any).requestPermission()
+        if (typeof (DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<PermissionState> }).requestPermission === 'function') {
+          const permission = await (DeviceOrientationEvent as unknown as { requestPermission: () => Promise<PermissionState> }).requestPermission()
           
           if (permission === 'granted') {
             window.addEventListener('deviceorientation', handleOrientation, true)
