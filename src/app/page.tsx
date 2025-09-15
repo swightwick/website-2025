@@ -3,6 +3,7 @@
 import ClientCanvas from '@/components/ClientCanvas'
 import { PROJECTS, CONTACT, LIKES } from '@/components/config'
 import HeartIcon from '@/components/HeartIcon'
+import GyroscopeCard from '@/components/GyroscopeCard'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
   const [minTimeElapsed, setMinTimeElapsed] = useState(false)
   const [canShowContent, setCanShowContent] = useState(false)
   const [showContent, setShowContent] = useState(false)
+  const [isTextBoxVisible, setIsTextBoxVisible] = useState(true)
 
   useEffect(() => {
     setMounted(true)
@@ -92,12 +94,30 @@ export default function Home() {
 
   return (
     <div className="relative w-full md:h-screen h-dvh overflow-hidden" suppressHydrationWarning>
+      {/* Hide button - top right of viewport */}
+      {isTextBoxVisible && (
+        <button
+          onClick={() => setIsTextBoxVisible(false)}
+          className="fixed top-4 right-4 z-20 w-10 h-10 text-white rounded-lg transition-all duration-200 pointer-events-auto backdrop-blur-sm flex items-center justify-center"
+          style={{
+            opacity: showContent ? 1 : 0,
+            transition: 'opacity 0.3s ease-out'
+          }}
+          aria-label="Hide text box"
+          type='button'
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+          </svg>
+        </button>
+      )}
       <div 
         className="absolute inset-0 z-0"
         style={{
           transition: 'opacity 1.5s ease-out',
           opacity: showContent ? 1 : 0,
-          willChange: 'opacity'
+          willChange: 'opacity',
+          pointerEvents: 'auto'
         }}
       >
         <ClientCanvas onLoaded={handleThreeLoaded} />
@@ -172,7 +192,14 @@ export default function Home() {
           willChange: 'opacity, transform'
         }}
       >
-        <div className="max-w-lg">
+        <div 
+          className="max-w-lg relative group"
+          style={{
+            transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+            transform: isTextBoxVisible ? 'translateX(0)' : 'translateX(-30%)',
+            opacity: isTextBoxVisible ? 1 : 0
+          }}
+        >
           <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-widest opacity-90">
             SAM WIGHTWICK
           </h1>
@@ -205,18 +232,25 @@ export default function Home() {
           {/* Projects Section */}
           <div className="mb-4 inline-block pt-4">
               <h3 className="font-medium opacity-90 mb-2 md:hidden">Latest Projects</h3>
-            <div className="flex flex-wrap items-center gap-2 text-sm">
-              <h3 className="font-medium opacity-90 hidden md:block">Latest Projects</h3>
+            <div className="flex flex-wrap items-center gap-4 text-sm">
+              <h3 className="font-medium opacity-90 hidden md:block mr-0">Latest Projects</h3>
               {PROJECTS.map((project, index) => (
-                <a 
+                <GyroscopeCard
                   key={index}
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 border border-white/20 rounded hover:border-white/40 transition-colors pointer-events-auto hover:bg-white/5"
+                  intensity={0.8}
+                  maxRotate={20}
+                  hoverScale={1.1}
+                  className="inline-block mr-2"
                 >
-                  {project.title}
-                </a>
+                  <a 
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 border border-white/20 rounded hover:border-white/40 transition-colors pointer-events-auto hover:bg-white/5 block"
+                  >
+                    {project.title}
+                  </a>
+                </GyroscopeCard>
               ))}
             </div>
           </div>
@@ -225,17 +259,24 @@ export default function Home() {
           <div className="pb-8">
               <h3 className="font-medium opacity-90 block md:hidden mb-2">Links</h3>
             <div className="flex flex-wrap items-center gap-2 text-sm">
-              <h3 className="font-medium opacity-90 hidden md:block">Links</h3>
+              <h3 className="font-medium opacity-90 hidden md:block mr-2">Links</h3>
               {CONTACT.map((contact, index) => (
-                <a 
+                <GyroscopeCard
                   key={index}
-                  href={contact.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 border border-white/20 rounded hover:border-white/40 transition-colors pointer-events-auto hover:bg-white/5"
+                  intensity={0.8}
+                  maxRotate={20}
+                  hoverScale={1.1}
+                  className="inline-block mr-2"
                 >
-                  {contact.title}
-                </a>
+                  <a 
+                    href={contact.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 border border-white/20 rounded hover:border-white/40 transition-colors pointer-events-auto hover:bg-white/5 block"
+                  >
+                    {contact.title}
+                  </a>
+                </GyroscopeCard>
               ))}
             </div>
           </div>
@@ -243,6 +284,24 @@ export default function Home() {
 
         </div>
       </div>
+
+      {/* Show button - appears when text box is hidden */}
+      {!isTextBoxVisible && (
+        <button
+          onClick={() => setIsTextBoxVisible(true)}
+          className="fixed top-4 right-4 z-20 w-10 h-10 text-white rounded-lg transition-all duration-200 pointer-events-auto flex items-center justify-center backdrop-blur-sm"
+          style={{
+            opacity: showContent ? 1 : 0,
+            transition: 'opacity 0.3s ease-out'
+          }}
+          aria-label="Show text box"
+          type='button'
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+          </svg>
+        </button>
+      )}
     </div>
   )
 }

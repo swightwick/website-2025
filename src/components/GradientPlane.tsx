@@ -47,6 +47,18 @@ const fragmentShader = `
     return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
   }
   
+  // Realistic film grain texture
+  float grain(vec2 st) {
+    vec2 seed = st + fract(time * 0.05); // Slower, more subtle animation
+    // Use multiple offset calculations to break up patterns
+    float r1 = fract(sin(dot(seed, vec2(127.1, 311.7))) * 43758.5453);
+    float r2 = fract(sin(dot(seed + vec2(0.1, 0.1), vec2(269.5, 183.3))) * 19134.2843);
+    float r3 = fract(sin(dot(seed + vec2(0.2, 0.05), vec2(419.2, 371.9))) * 71253.9161);
+    
+    // Combine multiple random values for more organic grain
+    return (r1 + r2 * 0.7 + r3 * 0.5) / 2.2;
+  }
+  
   void main() {
     vec2 st = vUv * 3.0;
     
@@ -66,7 +78,17 @@ const fragmentShader = `
     // Mix everything together for infinite morphing
     float gradient = mix(combinedNoise, wave1 * wave2, 0.3);
     
+    // Add realistic film grain texture
+    float grainValue = grain(vUv * 1200.0); // Higher frequency for finer grain
+    grainValue = (grainValue - 0.5) * 0.04; // Subtle intensity: -2% to +2%
+    
     vec3 color = mix(magenta, babyBlue, gradient);
+    
+    // Apply grain to each color channel for authentic film grain look
+    color.r += grainValue;
+    color.g += grainValue * 0.9; // Slightly less green
+    color.b += grainValue * 1.1; // Slightly more blue
+    
     gl_FragColor = vec4(color, 1.0);
   }
 `
