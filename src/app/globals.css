@@ -26,3 +26,18 @@ body {
   padding: 0;
   overflow: hidden;
 }
+
+/* Disable text selection on mobile only */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Re-enable for interactive elements */
+  a, input, textarea, button {
+    -webkit-user-select: auto;
+    -webkit-touch-callout: default;
+  }
+}
